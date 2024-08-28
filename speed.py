@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import speedtest
 import threading
+import bandmonitor
 
 app = Flask(__name__)
 CORS(app)

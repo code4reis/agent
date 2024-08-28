@@ -1,8 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import speedtest
-import threading
-import bandmonitor
 
 app = Flask(__name__)
 CORS(app)
@@ -11,6 +9,7 @@ CORS(app)
 last_result = None
 
 # Função para realizar o teste de velocidade
+@app.route('/start_speedtest', methods=['GET'])
 def run_speedtest():
     global last_result
     try:
@@ -29,6 +28,7 @@ def run_speedtest():
         }
         
         last_result = resultados
+        return jsonify(last_result)
     
     except speedtest.ConfigRetrievalError as e:
         print(f"ConfigRetrievalError: {e}")
@@ -36,19 +36,3 @@ def run_speedtest():
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         last_result = {"error": "An unexpected error occurred during the speed test."}
-
-@app.route('/speedtest', methods=['GET'])
-def speedtest_route():
-    global last_result
-    if not last_result:
-        return jsonify({"status": "Test in progress"}), 202
-    else:
-        result = last_result
-        last_result = None
-        return jsonify(result)
-
-@app.route('/start_speedtest', methods=['POST'])
-def start_speedtest():
-    thread = threading.Thread(target=run_speedtest)
-    thread.start()
-    return jsonify({"status": "Speed test started"}), 200

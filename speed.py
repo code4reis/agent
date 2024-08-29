@@ -1,9 +1,6 @@
-from flask import Flask, jsonify
-from flask_cors import CORS
+from main import app
+from flask import jsonify
 import speedtest
-
-app = Flask(__name__)
-CORS(app)
 
 # Variável global para armazenar o último resultado do teste de velocidade
 last_result = None

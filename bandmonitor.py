@@ -1,9 +1,7 @@
+from main import app
 from flask import Flask, jsonify
 import psutil, time, json, threading, os
-from flask_cors import CORS
 
-app = Flask(__name__)
-CORS(app)
 
 dados = 'consumo.json'
 caminho_arquivo = os.path.abspath(dados)
@@ -40,7 +38,7 @@ def monitoramento(intervalo=1):
         }
 
         # Verifica se o consumo será maior que 1 Megabyte
-        if mb_download > 1 or mb_upload > 1:
+        if mb_download > 10 or mb_upload > 10:
             with monitoramento_lock:
                 try:
                     with open(dados, 'r') as file:
